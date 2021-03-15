@@ -30,3 +30,13 @@ export const updatePost = (id, post) => async (dispatch) => {
         console.log(error.message);
     }
 }
+
+export const deletePost = (id) => async (dispatch) => {
+    try {
+        await api.deletePost(id); // 여기서는 const 변수를 쓸 필요가 없다.(삭제이기때문에 반환데이터는 필요없음)
+
+        dispatch({ type: 'DELETE', payload: id });
+    } catch (error) {
+        console.log(error);
+    }
+}
