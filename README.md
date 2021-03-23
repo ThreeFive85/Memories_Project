@@ -1,3 +1,3 @@
 # Memories_Project
 
-# USE : React + Redux
+# USE : NodeJS + MongoDB + React + Redux + Material-UI
