@@ -1,13 +1,17 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Avatar, Button, Paper, Grid, Typography, Container, TextField } from '@material-ui/core';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 
 import useStyles from './styles';
+import Input from './Input';
 
 function Auth() {
     const classes = useStyles();
+    const [showPassword, setShowPassword] = useState(false);
 
-    const isSignup = false;
+    const isSignup = true;
+
+    const handleShowPassword = () => setShowPassword((prevShowPassword) => !prevShowPassword);
 
     const handleSubmit = () => {
 
@@ -18,7 +22,7 @@ function Auth() {
     }
 
     return (
-        <Container component="main" maxWidth="xs">
+        <Container component="main" maxWidth="sm">
             <Paper className={classes.paper} elevation={3}>
                 <Avatar className={classes.avatar}>
                     <LockOutlinedIcon />
@@ -29,11 +33,18 @@ function Auth() {
                         {
                             isSignup && (
                                 <>
-                                    <TextField name="firstName" label="First Name" handleChange={handleChange} autoFocus xs={6} />
+                                    <Input name="Name" label="Name" handleChange={handleChange} type="name" />
+                                    {/* <Input name="firstName" label="First Name" handleChange={handleChange} half /> */}
                                 </>
                             )
                         }
+                        <Input name="email" label="Email Address" handleChange={handleChange} type="email" />
+                        <Input name="password" label="Password" handleChange={handleChange} type={showPassword ? "text" : "password"} handleShowPassword={handleShowPassword} />
+                        { isSignup && <Input name="confirmPassword" label="Repeat Password" handleChange={handleChange} type="password" /> }
                     </Grid>
+                    <Button type="submit" fullWidth variant="contained" color="primary" className={classes.submit}>
+                        {isSignup ? 'Sign up' : 'Sign In'}
+                    </Button>
                 </form>
             </Paper>
         </Container>
