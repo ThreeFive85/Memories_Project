@@ -21,6 +21,10 @@ function Auth() {
 
     }
 
+    const switchMode = () => {
+
+    }
+
     return (
         <Container component="main" maxWidth="sm">
             <Paper className={classes.paper} elevation={3}>
@@ -45,6 +49,13 @@ function Auth() {
                     <Button type="submit" fullWidth variant="contained" color="primary" className={classes.submit}>
                         {isSignup ? 'Sign up' : 'Sign In'}
                     </Button>
+                    <Grid container justify="flex-end">
+                        <Grid item>
+                            <Button onClick={switchMode}>
+                                { isSignup ? 'Already have an account? Sign In' : "Don't have an account? Sign Up"}
+                            </Button>
+                        </Grid>
+                    </Grid>
                 </form>
             </Paper>
         </Container>
