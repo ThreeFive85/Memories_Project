@@ -1,6 +1,8 @@
 import React, { useState } from 'react'
 import { Avatar, Button, Paper, Grid, Typography, Container, TextField } from '@material-ui/core';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
+import { GoogleLogin } from 'react-google-login';
+import Icon from './icon';
 
 import useStyles from './styles';
 import Input from './Input';
@@ -25,6 +27,13 @@ function Auth() {
         handleShowPassword(false)
     }
 
+    const googleSuccess = (res) => {
+        console.log(res);
+    }
+    const googleFailure = () => {
+        console.log("구글 로그인 실패. 다시 시도 바람");
+    }
+
     return (
         <Container component="main" maxWidth="sm">
             <Paper className={classes.paper} elevation={3}>
@@ -46,6 +55,25 @@ function Auth() {
                         <Input name="password" label="Password" handleChange={handleChange} type={showPassword ? "text" : "password"} handleShowPassword={handleShowPassword} />
                         { isSignup && <Input name="confirmPassword" label="Repeat Password" handleChange={handleChange} type="password" /> }
                     </Grid>
+                    <GoogleLogin
+                        clientId="GOOGLE ID"
+                        render={(renderProps) => {
+                            <Button 
+                                className={classes.googleButton} 
+                                color="primary" 
+                                fullWidth 
+                                onClick={renderProps.onClick} 
+                                disabled={renderProps.disabled} 
+                                startIcon={<Icon />} 
+                                variant="contained"
+                            >
+                                Google Sign In
+                            </Button>
+                        }}
+                        onSuccess={googleSuccess}
+                        onFailure={googleFailure}
+                        cookiePolicy="single_host_origin"
+                    />
                     <Button type="submit" fullWidth variant="contained" color="primary" className={classes.submit}>
                         {isSignup ? 'Sign up' : 'Sign In'}
                     </Button>
