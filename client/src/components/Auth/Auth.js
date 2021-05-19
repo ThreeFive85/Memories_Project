@@ -3,6 +3,7 @@ import { Avatar, Button, Paper, Grid, Typography, Container, TextField } from '@
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import { GoogleLogin } from 'react-google-login';
 import Icon from './icon';
+import { useDispatch } from 'react-redux';
 
 import useStyles from './styles';
 import Input from './Input';
@@ -12,6 +13,7 @@ function Auth() {
     const classes = useStyles();
     const [showPassword, setShowPassword] = useState(false);
     const [isSignup, setIsSignup] = useState(false);
+    const dispatch = useDispatch();
 
     const handleShowPassword = () => setShowPassword((prevShowPassword) => !prevShowPassword);
 
@@ -28,10 +30,19 @@ function Auth() {
         handleShowPassword(false)
     }
 
-    const googleSuccess = (res) => {
+    const googleSuccess = async (res) => {
         console.log(res);
+        const result = res?.profileObj;
+        const token = res?.tokenId;
+
+        try {
+            dispatch({ type: 'AUTH', data: {result, token}});
+        } catch (error) {
+            console.log(error);
+        }
     }
-    const googleFailure = () => {
+    const googleFailure = (error) => {
+        console.log(error);
         console.log("구글 로그인 실패. 다시 시도 바람");
     }
 
