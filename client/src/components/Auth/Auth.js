@@ -10,21 +10,25 @@ import useStyles from './styles';
 import Input from './Input';
 import { googleID } from './googleID';
 
+const initialState = { name: '', email: '', password:'', confirmPassword: '' };
+
 function Auth() {
     const classes = useStyles();
     const [showPassword, setShowPassword] = useState(false);
     const [isSignup, setIsSignup] = useState(false);
+    const [formData, setFormData] = useState(initialState);
     const dispatch = useDispatch();
     const history = useHistory();
 
     const handleShowPassword = () => setShowPassword((prevShowPassword) => !prevShowPassword);
 
-    const handleSubmit = () => {
-
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        console.log(formData);
     }
 
-    const handleChange = () => {
-
+    const handleChange = (e) => {
+        setFormData({ ...formData, [e.target.name]: e.target.value });
     }
 
     const switchMode = () => {
@@ -62,7 +66,7 @@ function Auth() {
                         {
                             isSignup && (
                                 <>
-                                    <Input name="Name" label="Name" handleChange={handleChange} type="name" />
+                                    <Input name="name" label="Name" handleChange={handleChange} type="name" />
                                     {/* <Input name="firstName" label="First Name" handleChange={handleChange} half /> */}
                                 </>
                             )
