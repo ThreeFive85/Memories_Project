@@ -9,6 +9,7 @@ import { useHistory } from 'react-router-dom';
 import useStyles from './styles';
 import Input from './Input';
 import { googleID } from './googleID';
+import { signin, signup } from '../../actions/auth';
 
 const initialState = { name: '', email: '', password:'', confirmPassword: '' };
 
@@ -24,7 +25,12 @@ function Auth() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log(formData);
+        // console.log(formData);
+        if (isSignup) {
+            dispatch(signup(formData, history));
+        } else {
+            dispatch(signin(formData, history))
+        }
     }
 
     const handleChange = (e) => {
