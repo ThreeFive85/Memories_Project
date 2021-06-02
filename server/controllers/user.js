@@ -25,5 +25,15 @@ export const signin = async (req, res) => {
 }
 
 export const signup = async (req, res) => {
-    
+    const { email, password, confirmPassword, name } = req.body;
+
+    try {
+        const existingUser = await User.findOne({ email });
+
+        if(existingUser) return res.status(400).json({ message: "존재하는 유저입니다." });
+
+        if(existingUser) return res.status(400).json({ message: "존재하는 유저입니다." });
+    } catch (error) {
+        
+    }
 }
