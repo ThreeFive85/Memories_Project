@@ -32,8 +32,16 @@ export const signup = async (req, res) => {
 
         if(existingUser) return res.status(400).json({ message: "존재하는 유저입니다." });
 
-        if(existingUser) return res.status(400).json({ message: "존재하는 유저입니다." });
+        if(password !== confirmPassword) return res.status(400).json({ message: "비밀번호가 일치하지 않습니다" });
+
+        const hashedPassword = await bcrypt.hash(password, 12);
+
+        const result = await User.create({ email, password: hashedPassword, name: `${name}`})
+
+        const token = jwt.sign({ email: result.email, id: result._id }, secret, { expiresIn: "1h"});
+
+        res.status(200).json({ result, token });
     } catch (error) {
-        
+        res.status(500).json({ message: '500 서버 에러'});
     }
 }
