@@ -2,7 +2,9 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 
 import User from '../models/user.js';
-import secret from '../../jwtSecret.js';
+// import secret from '../../jwtSecret.js';
+import dotenv from 'dotenv';
+dotenv.config();
 
 export const signin = async (req, res) => {
     const { email, password } = req.body;
@@ -16,7 +18,7 @@ export const signin = async (req, res) => {
 
         if(!isPasswordCorrect) return res.status(400).json({ message: "잘못된 암호입니다" });
 
-        const token = jwt.sign({ email: existingUser.email, id: existingUser._id }, secret, { expiresIn: "1h"});
+        const token = jwt.sign({ email: existingUser.email, id: existingUser._id }, process.env.SECRET, { expiresIn: "1h"});
 
         res.status(200).json({ result: existingUser, token });
     } catch (error) {
@@ -38,7 +40,7 @@ export const signup = async (req, res) => {
 
         const result = await User.create({ email, password: hashedPassword, name: `${name}`})
 
-        const token = jwt.sign({ email: result.email, id: result._id }, secret, { expiresIn: "1h"});
+        const token = jwt.sign({ email: result.email, id: result._id }, process.env.SECRET, { expiresIn: "1h"});
 
         res.status(200).json({ result, token });
     } catch (error) {
