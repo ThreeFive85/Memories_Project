@@ -11,7 +11,6 @@ import { createPost, updatePost } from '../../actions/posts';
 
 const Form = ({currentId, setCurrentId}) => {
     const [postData, setPostData] = useState({
-        creator: '',
         title: '',
         message: '',
         tags: '',
@@ -20,26 +19,27 @@ const Form = ({currentId, setCurrentId}) => {
     const post = useSelector((state) => currentId ? state.posts.find((p) => p._id === currentId) : null); 
     const classes = useStyles();
     const dispatch = useDispatch();
+    const user = JSON.parse(localStorage.getItem('profile'));
 
     useEffect(() => {
         if(post) setPostData(post);
     }, [post]);
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
-        if(currentId) {
-            dispatch(updatePost(currentId, postData));
+        if(currentId === 0) {
+            dispatch(createPost({ ...postData, name: user?.result?.name }));
         } else {
-            dispatch(createPost(postData));
+            dispatch(updatePost(currentId, { ...postData, name: user?.result?.name }));
+            clear();
         }
-        clear();
+        console.log(user?.result?.name)
     }
 
     const clear = () => {
         setCurrentId(null);
         setPostData({
-            creator: '',
             title: '',
             message: '',
             tags: '',
@@ -47,11 +47,21 @@ const Form = ({currentId, setCurrentId}) => {
         })
     }
 
+    if(!user?.result?.name) {
+        return(
+            <Paper className={classes.paper}>
+                <Typography variant="h6" align="center">
+                    로그인을 하여 당신의 좋은 기억을 작성하고 또 다른 사람의 기억에 좋아요를 눌러주세요.
+                </Typography>
+            </Paper>
+        );
+    };
+
     return (
         <Paper className={classes.paper}>
             <form autoComplete="off" noValidate className={`${classes.root} ${classes.form}`} onSubmit={handleSubmit}>
                 <Typography variant="h6">{currentId ? 'Editing' : 'Creating'} a Memory</Typography>
-                <TextField name="creator" 
+                {/* <TextField name="creator" 
                     variant="outlined" 
                     label="Creator" 
                     fullWidth
@@ -60,7 +70,7 @@ const Form = ({currentId, setCurrentId}) => {
                         ...postData,
                         creator: e.target.value
                     })}
-                />
+                /> */}
                 <TextField name="title" 
                     variant="outlined" 
                     label="Title" 
