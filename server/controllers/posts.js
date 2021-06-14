@@ -1,5 +1,8 @@
+import express from 'express';
 import mongoose from 'mongoose';
 import PostMessage from '../models/postMessage.js';
+
+const router = express.Router();
 
 // https://www.restapitutorial.com/httpstatuscodes.html
 export const getPosts = async (req, res) => {
@@ -15,7 +18,7 @@ export const getPosts = async (req, res) => {
 export const createPost = async (req, res) => {
     const post = req.body;
 
-    const newPost = new PostMessage(post);
+    const newPost = new PostMessage( { ...post, creator: req.userId, createAt: new Date().toISOString() });
 
     try {
         await newPost.save();
@@ -70,3 +73,5 @@ export const likePost = async (req, res) => {
 
     res.json(updatedPost);
 }
+
+export default router;
