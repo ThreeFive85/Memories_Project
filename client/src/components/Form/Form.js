@@ -16,7 +16,7 @@ const Form = ({currentId, setCurrentId}) => {
         tags: '',
         selectedFile: '',
     });
-    const post = useSelector((state) => currentId ? state.posts.find((p) => p._id === currentId) : null); 
+    const post = useSelector((state) => (currentId ? state.posts.find((message) => message._id === currentId) : null));
     const classes = useStyles();
     const dispatch = useDispatch();
     const user = JSON.parse(localStorage.getItem('profile'));
@@ -27,15 +27,15 @@ const Form = ({currentId, setCurrentId}) => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
-        if(currentId === 0) {
-            dispatch(createPost({ ...postData, name: user?.result?.name }));
-        } else {
+    
+        if (currentId) {
             dispatch(updatePost(currentId, { ...postData, name: user?.result?.name }));
             clear();
+        } else {
+            dispatch(createPost({ ...postData, name: user?.result?.name }));
+            clear();
         }
-        console.log(user?.result?.name)
-    }
+      };
 
     const clear = () => {
         setCurrentId(null);
@@ -61,16 +61,6 @@ const Form = ({currentId, setCurrentId}) => {
         <Paper className={classes.paper}>
             <form autoComplete="off" noValidate className={`${classes.root} ${classes.form}`} onSubmit={handleSubmit}>
                 <Typography variant="h6">{currentId ? 'Editing' : 'Creating'} a Memory</Typography>
-                {/* <TextField name="creator" 
-                    variant="outlined" 
-                    label="Creator" 
-                    fullWidth
-                    value={postData.creator}
-                    onChange={(e) => setPostData({
-                        ...postData,
-                        creator: e.target.value
-                    })}
-                /> */}
                 <TextField name="title" 
                     variant="outlined" 
                     label="Title" 
@@ -85,6 +75,8 @@ const Form = ({currentId, setCurrentId}) => {
                     variant="outlined" 
                     label="Message" 
                     fullWidth
+                    multiline
+                    rows={4}
                     value={postData.message}
                     onChange={(e) => setPostData({
                         ...postData,
